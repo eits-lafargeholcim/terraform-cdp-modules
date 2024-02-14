@@ -544,6 +544,12 @@ resource "aws_iam_role_policy_attachment" "cdp_idbroker_role_attach2" {
   policy_arn = aws_iam_policy.cdp_log_data_access_policy.arn
 }
 
+# Attach AWS SSM Managed Instance Core Policy to the Role
+resource "aws_iam_role_policy_attachment" "cdp_idbroker_role_attach3" {
+  role       = aws_iam_role.cdp_idbroker_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 # ------- AWS Service Roles - CDP Log -------
 # First create the Assume role policy document
 data "aws_iam_policy_document" "cdp_log_role_policy_doc" {
@@ -596,6 +602,14 @@ resource "aws_iam_role_policy_attachment" "cdp_log_role_attach3" {
   role       = aws_iam_role.cdp_log_role.name
   policy_arn = aws_iam_policy.cdp_datalake_backup_policy.arn
 }
+
+# Attach AWS SSM Managed Instance Core Policy to the Role
+resource "aws_iam_role_policy_attachment" "cdp_log_role_attach4" {
+
+  role       = aws_iam_role.cdp_log_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 
 # ------- AWS Data Access Roles - CDP Datalake Admin -------
 # First create the Assume role policy document
