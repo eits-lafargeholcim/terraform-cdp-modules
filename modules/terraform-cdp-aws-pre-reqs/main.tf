@@ -784,3 +784,63 @@ resource "aws_iam_role_policy_attachment" "cdp_ranger_audit_role_attach6" {
   role       = aws_iam_role.cdp_ranger_audit_role.name
   policy_arn = aws_iam_policy.cdp_datalake_restore_policy.arn
 }
+
+# ------- Holcim Added Policy with missing statements -------
+resource "aws_iam_policy" "delete_logs_backup" {
+  name        = "delete_logs_backup"
+  description = "Policy to delete logs backups"
+  # define a policy with deleteobjects permissions on the backup name send in the variable log_storage
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = [
+          "s3:DeleteObject",
+          "s3:PutObject"
+        ],
+        Resource = [
+          "${aws_s3_bucket.cdp_storage_locations[local.log_storage.log_storage_bucket].arn}/backups/*",
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "read_logs_backup" {
+  name        = "read_logs_backup"
+  description = "Policy to delete logs backups"
+  # define a policy with deleteobjects permissions on the backup name send in the variable log_storage
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = [
+          "s3:GetObject",
+          "s3:ListBucket"
+        ],
+        Resource = [
+          "${aws_s3_bucket.cdp_storage_locations[local.log_storage.log_storage_bucket].arn}/backups/*",
+          "${aws_s3_bucket.cdp_storage_locations[local.log_storage.log_storage_bucket].arn}/backups",
+        ]
+      }
+    ]
+  })  
+  
+}
+
+resource "aws_iam_role_policy_attachment" "cdp_ranger_audit_role_attach7" {
+  role       = aws_iam_role.cdp_ranger_audit_role.name
+  policy_arn = aws_iam_policy.delete_logs_backup.arn
+}
+
+resource "aws_iam_role_policy_attachment" "cdp_datalake_admin_role_attach7" {
+  role       = aws_iam_role.cdp_datalake_admin_role.name
+  policy_arn = aws_iam_policy.delete_logs_backup.arn
+}
+
+resource "aws_iam_role_policy_attachment" "cdp_log_role_attach5" {
+  role       = aws_iam_role.cdp_log_role.name
+  policy_arn = aws_iam_policy.read_logs_backup.arn
+}
