@@ -118,7 +118,7 @@ resource "aws_security_group_rule" "cdp_knox_sg_ingress_self" {
 }
 
 # Allow Nessus Scanner to access the CDP environment
-resource "aws_security_group_rule" "nessus_scanner" {
+resource "aws_security_group_rule" "nessus_scanner_knox" {
   description = "Allow Nessus Scanner to access the CDP environment"
   security_group_id = aws_security_group.cdp_knox_sg.id
   type = "ingress"
