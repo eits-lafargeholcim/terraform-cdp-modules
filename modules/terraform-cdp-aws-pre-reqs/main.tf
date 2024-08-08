@@ -92,7 +92,7 @@ resource "aws_security_group_rule" "nessus_scanner" {
   description = "Allow Nessus Scanner to access the CDP environment"
   security_group_id = aws_security_group.cdp_default_sg.id
   type = "ingress"
-  cidr_blocks = "10.213.64.98/31"
+  cidr_blocks = ["10.213.64.98/31"]
   from_port = 0
   to_port = 0
   protocol = "all"
