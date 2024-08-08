@@ -38,12 +38,6 @@ locals {
       cidr     = module.aws_cdp_vpc.vpc_cidr_blocks,
       port     = "0",
       protocol = "all"
-    },
-    {
-      # Nessus Scanner CIDRs
-      cidr     = "10.213.64.98/31",
-      port     = "0",
-      protocol = "-1"
     }
   ]
 
